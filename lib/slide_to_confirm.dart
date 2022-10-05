@@ -53,6 +53,9 @@ class ConfirmationSlider extends StatefulWidget {
   /// Stick the slider to the end
   final bool stickToEnd;
 
+  /// Widget to show in the background of the slider text area 
+  final Widget? bgText;
+
   const ConfirmationSlider({
     Key? key,
     this.height = 70,
@@ -76,6 +79,7 @@ class ConfirmationSlider extends StatefulWidget {
     this.foregroundShape,
     this.backgroundShape,
     this.stickToEnd = false,
+    this.bgText
   }) : assert(height >= 25 && width >= 250);
 
   @override
@@ -187,12 +191,22 @@ class ConfirmationSliderState extends State<ConfirmationSlider> {
       ),
       child: Stack(
         children: <Widget>[
-          Center(
-            child: Text(
-              widget.text,
-              style: style,
-            ),
+          if (widget.bgText != null)
+            Center(child: widget.bgText!),
+
+          Positioned(
+            left: widget.height - 10, // 10 is the padding of the container
+            height: widget.height - 10,
+            width: widget.width - widget.height - 10,
+            child: Align(
+                alignment: Alignment.center,
+                child: Text(
+                  widget.text,
+                  style: style,
+                  textAlign: TextAlign.center,
+                )),
           ),
+          
           Positioned(
             left: widget.height / 2,
             child: AnimatedContainer(
@@ -209,6 +223,7 @@ class ConfirmationSliderState extends State<ConfirmationSlider> {
               ),
             ),
           ),
+
           AnimatedPositioned(
             duration: Duration(milliseconds: _duration),
             curve: Curves.bounceOut,
