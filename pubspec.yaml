@@ -5,11 +5,13 @@ author: Gustav Friis-Hansen <friisdeveloper@gmail.com>
 homepage: https://github.com/Friiiis/slide_to_confirm
 
 environment:
-  sdk: ">=2.13.0 <3.0.0"
+  sdk: ">3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
+
+  simple_animations: ^5.0.2
 
 dev_dependencies:
   flutter_test:

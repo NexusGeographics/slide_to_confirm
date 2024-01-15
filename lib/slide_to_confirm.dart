@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:simple_animations/simple_animations.dart';
 
 class ConfirmationSlider extends StatefulWidget {
   /// Height of the slider. Defaults to 70.
@@ -56,6 +57,12 @@ class ConfirmationSlider extends StatefulWidget {
   /// Widget to show in the background of the slider text area 
   final Widget? bgText;
 
+  /// Flag to indicate if has to show a background animation (two arrows moving from left to right)
+  final bool showBgAnimation;
+
+  /// Color of the background animation (if showed)
+  final Color? bgAnimationColor;
+
   const ConfirmationSlider({
     Key? key,
     this.height = 70,
@@ -79,7 +86,9 @@ class ConfirmationSlider extends StatefulWidget {
     this.foregroundShape,
     this.backgroundShape,
     this.stickToEnd = false,
-    this.bgText
+    this.bgText,
+    this.showBgAnimation = false,
+    this.bgAnimationColor,
   }) : assert(height >= 25 && width >= 250);
 
   @override
@@ -194,6 +203,9 @@ class ConfirmationSliderState extends State<ConfirmationSlider> {
           if (widget.bgText != null)
             Center(child: widget.bgText!),
 
+          if (widget.showBgAnimation)
+            _bgAnimation(context),
+
           Positioned(
             left: widget.height - 10, // 10 is the padding of the container
             height: widget.height - 10,
@@ -257,6 +269,33 @@ class ConfirmationSliderState extends State<ConfirmationSlider> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _bgAnimation(BuildContext context) => Stack(children: [
+    _activateBg(MediaQuery.of(context).size, 0), //First arrow
+    _activateBg(MediaQuery.of(context).size, 16) //Second arrow
+  ]);
+
+  Widget _activateBg(Size size, int padding) {
+    var bgSize = size.width - 64 - 72;
+    return LoopAnimationBuilder<double>(
+      tween: Tween<double>(
+        begin: -bgSize / 2 + 26 + padding, 
+        end: bgSize / 2 + padding
+      ),
+      curve: Curves.easeInOut,
+      duration: const Duration(seconds: 3, milliseconds: 200),
+      builder: (context, value, child) {
+        return Transform.translate(
+          offset: Offset(value, -5),
+          child: Icon(
+            Icons.arrow_forward_ios_rounded,
+            size: 60,
+            color: widget.bgAnimationColor ?? Color(0xddfdc33b),
+          )
+        );
+      }
     );
   }
 }
