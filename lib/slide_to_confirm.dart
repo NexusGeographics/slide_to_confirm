@@ -277,18 +277,18 @@ class ConfirmationSliderState extends State<ConfirmationSlider> {
     _activateBg(MediaQuery.of(context).size, 16) //Second arrow
   ]);
 
-  Widget _activateBg(Size size, int padding) {
-    var bgSize = size.width - 64 - 72;
+  Widget _activateBg(Size size, double padding) {
+    var bgSize = widget.width - 72;
     return LoopAnimationBuilder<double>(
       tween: Tween<double>(
-        begin: -bgSize / 2 + 26 + padding, 
-        end: bgSize / 2 + padding
+        begin: 12 + padding, 
+        end: bgSize + padding
       ),
       curve: Curves.easeInOut,
       duration: const Duration(seconds: 3, milliseconds: 200),
       builder: (context, value, child) {
         return Transform.translate(
-          offset: Offset(value, -5),
+          offset: Offset(value, 0),
           child: Icon(
             Icons.arrow_forward_ios_rounded,
             size: 60,
